@@ -6,11 +6,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 
+find_package(Qt6 REQUIRED COMPONENTS Network)
+
+find_package(Qt6 REQUIRED COMPONENTS Charts)
+
 qt_standard_project_setup(REQUIRES 6.8)
 
 qt_add_executable(appSunnyDay
     main.cpp
 )
+
+
 
 qt_add_qml_module(appSunnyDay
     URI SunnyDay
@@ -19,7 +25,30 @@ qt_add_qml_module(appSunnyDay
     Main.qml
     RESOURCES src/images/background.png
     SOURCES applicationengine.h applicationengine.cpp
+    RESOURCES src/icon/cloud.png src/icon/humidity.png src/icon/storm.png src/icon/sunrise.png src/icon/sunset.png src/icon/vision.png
+    QML_FILES MoreInfo.qml
+    RESOURCES src/icon/restart.png
+    RESOURCES src/icon/close.png
+    RESOURCES android/AndroidManifest.xml android/build.gradle android/res/values/libs.xml android/res/xml/qtprovider_paths.xml
+    RESOURCES android/AndroidManifest.xml android/build.gradle android/res/values/libs.xml android/res/xml/qtprovider_paths.xml
 )
+
+if(ANDROID)
+    # Укажите путь к вашему AndroidManifest.xml
+    set(ANDROID_MANIFEST "${CMAKE_CURRENT_SOURCE_DIR}/android/AndroidManifest.xml")
+
+    # Убедитесь, что файл существует
+    if(NOT EXISTS "${ANDROID_MANIFEST}")
+        message(FATAL_ERROR "AndroidManifest.xml not found at ${ANDROID_MANIFEST}")
+    endif()
+
+    # Установите свойство для Android манифеста
+    set_target_properties(appSunnyDay PROPERTIES
+        QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android"
+        ANDROID_MANIFEST "${ANDROID_MANIFEST}"
+    )
+endif()
+
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
@@ -32,9 +61,14 @@ set_target_properties(appSunnyDay PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
+
+
 target_link_libraries(appSunnyDay
     PRIVATE Qt6::Quick
 )
+target_link_libraries(appSunnyDay PRIVATE Qt6::Network)
+
+target_link_libraries(appSunnyDay PRIVATE Qt6::Charts)
 
 include(GNUInstallDirs)
 install(TARGETS appSunnyDay

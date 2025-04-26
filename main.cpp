@@ -1,11 +1,14 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include<QFont>
-#include<QFontDatabase>
+#include"applicationengine.h"
+#include <QQmlApplicationEngine>
+#include<QQmlContext>
+#include<QtQml>
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
     QObject::connect(
@@ -14,7 +17,12 @@ int main(int argc, char *argv[])
         &app,
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
+
+    qmlRegisterType<applicationEngine>("Engine",1,0,"Engine");
     engine.loadFromModule("SunnyDay", "Main");
+
+
+
 
     return app.exec();
 }
