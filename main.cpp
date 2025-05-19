@@ -18,7 +18,9 @@ int main(int argc, char *argv[])
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
 
+
     qmlRegisterType<applicationEngine>("Engine",1,0,"Engine");
+
     engine.loadFromModule("SunnyDay", "Main");
 
 

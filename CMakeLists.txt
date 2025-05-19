@@ -10,6 +10,8 @@ find_package(Qt6 REQUIRED COMPONENTS Network)
 
 find_package(Qt6 REQUIRED COMPONENTS Charts)
 
+find_package(Qt6 REQUIRED COMPONENTS Sql)
+
 qt_standard_project_setup(REQUIRES 6.8)
 
 qt_add_executable(appSunnyDay
@@ -31,6 +33,16 @@ qt_add_qml_module(appSunnyDay
     RESOURCES src/icon/close.png
     RESOURCES android/AndroidManifest.xml android/build.gradle android/res/values/libs.xml android/res/xml/qtprovider_paths.xml
     RESOURCES android/AndroidManifest.xml android/build.gradle android/res/values/libs.xml android/res/xml/qtprovider_paths.xml
+    QML_FILES ChooseCity.qml
+    RESOURCES src/icon/back.png
+    RESOURCES src/icon/favoriteFalse.png src/icon/favoriteTrue.png
+    QML_FILES CustomCheckBox.qml
+    QML_FILES MyChooseCity.qml
+    SOURCES listmodel.h
+    SOURCES listmodel.cpp
+    RESOURCES src/icon/delete.png
+    SOURCES
+    QML_FILES HourElement.qml
 )
 
 if(ANDROID)
@@ -69,6 +81,8 @@ target_link_libraries(appSunnyDay
 target_link_libraries(appSunnyDay PRIVATE Qt6::Network)
 
 target_link_libraries(appSunnyDay PRIVATE Qt6::Charts)
+
+target_link_libraries(appSunnyDay PRIVATE Qt6::Sql)
 
 include(GNUInstallDirs)
 install(TARGETS appSunnyDay
